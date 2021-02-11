@@ -9,6 +9,8 @@ public class TargetFinder : MonoBehaviour
     //public GameObject target;
     public List<GameObject> targetList = new List<GameObject>();
 
+    [SerializeField] bool isEnemy;
+
     private void Start()
     {
         sc = gameObject.GetComponent<SphereCollider>();
@@ -17,17 +19,13 @@ public class TargetFinder : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.tag == "MyUnit")
+        if(other.gameObject.tag == "MyUnit" && isEnemy)
         {
             targetList.Add(other.gameObject);
         }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.gameObject.tag == "MyUnit")
+        else if(other.gameObject.tag == "Enemy" && !isEnemy)
         {
-            targetList.Remove(other.gameObject);
+            targetList.Add(other.gameObject);
         }
     }
 }

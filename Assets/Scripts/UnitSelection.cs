@@ -19,7 +19,6 @@ public class UnitSelection : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.LeftShift))
         {
             ReleaseSelectionBox();
-            Debug.Log("Release selectionbox");
         }
     }
 
@@ -36,7 +35,6 @@ public class UnitSelection : MonoBehaviour
             {
                 if (hit.transform.gameObject.CompareTag("MyUnit"))
                 {
-                    Debug.Log("test");
                     BasicUnitHandler unit = hit.transform.gameObject.GetComponent<BasicUnitHandler>();
                     unitSelectionList.Add(unit);
                     unit.isActive = !unit.isActive;
@@ -55,12 +53,9 @@ public class UnitSelection : MonoBehaviour
             startPos = Input.mousePosition;
             RaycastHit hit;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            Debug.DrawRay(Camera.main.ScreenToViewportPoint(Input.mousePosition), (Camera.main.ScreenToWorldPoint(startPos) - Camera.main.ScreenToViewportPoint(Input.mousePosition)).normalized, Color.green);
-            //Debug.Log(Camera.main.ScreenToViewportPoint(Input.mousePosition) + "   " + Camera.main.ScreenPointToRay(Input.mousePosition));
 
             if (Physics.Raycast(ray, out hit))
             {
-                Debug.Log(hit.point);
                 if (hit.transform.gameObject.CompareTag("MyUnit"))
                 {
                     BasicUnitHandler unit = hit.transform.gameObject.GetComponent<BasicUnitHandler>();

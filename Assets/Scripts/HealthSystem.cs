@@ -22,9 +22,13 @@ public class HealthSystem : MonoBehaviour
     public void Damage(float damageAmount, Slider healthBarSlider)
     {
         health -= damageAmount;
-        if (health < 0)
+        if (health <= 0)
+        {
             health = 0;
-        Debug.Log(health + "    " + healthMax);
+            Destroy(gameObject, 5f);
+            gameObject.SetActive(false);
+        }
+
         healthBarSlider.value = health / healthMax;
     }
     public void Heal(float healAmount)

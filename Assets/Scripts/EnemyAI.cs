@@ -27,7 +27,9 @@ public class EnemyAI : MonoBehaviour
     State state;
     NavMeshAgent agent;
     TargetFinder targetFinder;
-    
+    [SerializeField] UnitSelection unitSelec;
+    public Slider healthBarSlider;
+    public HealthSystem healthSystem;
 
     void Awake()
     {
@@ -41,11 +43,14 @@ public class EnemyAI : MonoBehaviour
         agent = gameObject.GetComponent<NavMeshAgent>();
         startingPosition = transform.position;
         roamPos = GetRoamingPosition();
+        healthSystem = gameObject.GetComponent<HealthSystem>();
+        healthSystem.health = health;
+        healthSystem.healthMax = health;
     }
 
     void Update()
     {
-        switch(state)
+        switch (state)
         {
             default:
 
@@ -60,6 +65,11 @@ public class EnemyAI : MonoBehaviour
                 break;
 
             case State.ChaseTarget:
+                if (targetFinder.targetList.Count == 0)
+                {
+                    Debug.Log("everyone escaped");
+                    state = State.GoingBackToStart;
+                }
                 agent.SetDestination(targetFinder.targetList[0].transform.position);
 
                 if (Vector3.Distance(transform.position, targetFinder.targetList[0].gameObject.transform.position) < attackRange)
@@ -67,14 +77,19 @@ public class EnemyAI : MonoBehaviour
                     agent.isStopped = true;
                     if(Time.time > nextShootTime)
                     {
+                        
                         Slider targetHealthBar = targetFinder.targetList[0].gameObject.GetComponent<BasicUnitHandler>().healthBarSlider;
                         targetFinder.targetList[0].gameObject.GetComponent<HealthSystem>().Damage(damage, targetHealthBar);
+
                         if(targetFinder.targetList[0].gameObject.GetComponent<HealthSystem>().health == 0)
                         {
+                            unitSelec.unitSelectionList.Remove(targetFinder.targetList[0].GetComponent<BasicUnitHandler>());
                             targetFinder.targetList.RemoveAt(0);
-                            //targetFinder.targetList = null;
-                            agent.isStopped = false;
-                            state = State.GoingBackToStart;
+                            if (targetFinder.targetList.Count == 0)
+                            {
+                                agent.isStopped = false;
+                                state = State.GoingBackToStart;
+                            }
                         }
                         nextShootTime = Time.time + fireRate;
                     }
@@ -116,10 +131,12 @@ public class EnemyAI : MonoBehaviour
 
     void StopChasingCheck()
     {
-        if (Vector3.Distance(transform.position, targetFinder.targetList[0].gameObject.transform.position) > stopChasingDis)
+        foreach (GameObject target in targetFinder.targetList)
         {
-            state = State.Roaming;
-            //targetFinder.target = null;
+            if (Vector3.Distance(transform.position, target.transform.position) > stopChasingDis)
+            {
+                targetFinder.targetList.Remove(target);
+            }
         }
     }
 }

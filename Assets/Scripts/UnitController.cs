@@ -48,7 +48,7 @@ public class UnitController : MonoBehaviour
         {
             if (unit.isActive)
             {
-                //ATTACCKKKKK!!!!
+                unit.targetFinder.targetList.Insert(0, hit.collider.gameObject);
                 unit.WalkTo(targetPositionList[targetPositionIndex]);
                 targetPositionIndex = (targetPositionIndex + 1) % targetPositionList.Count;
             }
