@@ -64,6 +64,8 @@ public class BasicUnitHandler : MonoBehaviour
                 agent.isStopped = false;
             
         }
+        else
+            agent.isStopped = false;
     }
 
     public void WalkTo(Vector3 pos)
