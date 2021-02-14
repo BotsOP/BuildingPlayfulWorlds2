@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class DungeonGenerator: MonoBehaviour
 {
@@ -9,6 +10,8 @@ public class DungeonGenerator: MonoBehaviour
     [Header("Prefabs")]
     public GameObject FloorPrefab;
     public GameObject WallPrefab;
+    public GameObject EnemyPrefab;
+    public NavMeshSurface surface;
 
 
     [Header("Dungeon Settings")]
@@ -18,6 +21,7 @@ public class DungeonGenerator: MonoBehaviour
     public int minRoomSize;
     public int maxRoomSize;
     public int widthCorridor;
+    public int roomAroundRooms;
 
     private Dictionary<Vector2Int, Tile> dungeonDictionary = new Dictionary<Vector2Int, Tile>();
     private List<Room> roomList = new List<Room>();
@@ -32,10 +36,14 @@ public class DungeonGenerator: MonoBehaviour
         int amountOfTries = 0;
         int amountOfMaxTries = 100;
         while(amountRooms > 1 || amountOfTries > amountOfMaxTries) {
+            int roomWidth = Random.Range(minRoomSize, maxRoomSize);
+            int roomHeight = Random.Range(minRoomSize, maxRoomSize);
+
             Room room = new Room()
             {
                 position = new Vector2Int(Random.Range(0, width), Random.Range(0, height)),
-                size = new Vector2Int(Random.Range(minRoomSize, maxRoomSize), Random.Range(minRoomSize, maxRoomSize))
+                size = new Vector2Int(roomWidth, roomHeight),
+                nonUseSize = new Vector2Int(roomWidth + roomAroundRooms * 2, roomHeight + roomAroundRooms * 2)
             };
 
             if (CheckIfRoomFitsInDungeon(room))
@@ -65,11 +73,13 @@ public class DungeonGenerator: MonoBehaviour
 
     private bool CheckIfRoomFitsInDungeon(Room room)
     {
-        for (int xx = room.position.x; xx < room.position.x + room.size.x; xx++)
+        Vector2Int nonUsePos = new Vector2Int(room.position.x - (room.nonUseSize.x - room.size.x) / 2, room.position.y - (room.nonUseSize.y - room.size.y) / 2);
+        for (int xx = nonUsePos.x; xx < nonUsePos.x + room.nonUseSize.x; xx++)
         {
-            for (int yy = room.position.y; yy < room.position.y + room.size.y; yy++)
+            for (int yy = nonUsePos.y; yy < nonUsePos.y + room.nonUseSize.y; yy++)
             {
                 Vector2Int pos = new Vector2Int(xx, yy);
+                
                 if (dungeonDictionary.ContainsKey(pos))
                 {
                     return false;
@@ -89,24 +99,21 @@ public class DungeonGenerator: MonoBehaviour
             Room startRoom = roomList[i];
             Room otherRoom = roomList[0];
             
-            int extraX = Random.Range(minRoomSize/2, startRoom.size.x - (widthCorridor - 1));
-            int extraY = Random.Range(minRoomSize/2, startRoom.size.y - (widthCorridor - 1));
-            Debug.Log(extraX + "    " + extraY);
+            int extraX = Random.Range(0, startRoom.size.x - (widthCorridor - 1));
+            int extraY = Random.Range(0, startRoom.size.y - (widthCorridor - 1));
 
             for(int j = 0; j <= widthCorridor; j++)
             {
                 int dirX = Mathf.RoundToInt(Mathf.Sign(otherRoom.position.x - startRoom.position.x));
                 int dirY = Mathf.RoundToInt(Mathf.Sign(otherRoom.position.y - startRoom.position.y));
 
-                Debug.Log(dirX + "    " + (startRoom.position.x + extraX) + "    " + (otherRoom.position.x + extraX));
                 for(int x = startRoom.position.x + extraX; x != otherRoom.position.x + extraX; x += dirX)
                 {
                     PlaceCorridor(new Vector2Int(x, startRoom.position.y + extraY + (j * dirY)));
                     if(x < -10 || x > 150)
                         break;
                 }
-    
-                Debug.Log(dirY + "    " + (startRoom.position.y + extraY) + "    " + (otherRoom.position.y + extraY));
+
                 for (int y = startRoom.position.y + extraY; y != otherRoom.position.y + extraY; y += dirY)
                 {
                     PlaceCorridor(new Vector2Int(otherRoom.position.x + j + extraX, y));
@@ -127,11 +134,13 @@ public class DungeonGenerator: MonoBehaviour
     {
         foreach(KeyValuePair<Vector2Int, Tile> kv in dungeonDictionary)
         {
-            GameObject floor = Instantiate(FloorPrefab, new Vector3Int(kv.Key.x, 0, kv.Key.y), Quaternion.identity);
+            GameObject floor = Instantiate(FloorPrefab, new Vector3Int(kv.Key.x, 0, kv.Key.y), Quaternion.identity, GameObject.Find("Dungeon").transform);
             allSpawnedObjects.Add(floor);
 
-            //SpawnWallsForTile(kv.Key);
+            SpawnWallsForTile(kv.Key);
         }
+
+        surface.BuildNavMesh();
     }
 
     private void AddPrebuildRooms()
@@ -146,25 +155,24 @@ public class DungeonGenerator: MonoBehaviour
 
         AddRoomToDungeon(room);
     }
-
-    // private void SpawnWallsForTile(Vector2Int position)
-    // {
-    //     for (int x = -1; x <= 1; x++)
-    //     {
-    //         for (int z = -1; z <= 1; z++)
-    //         {
-    //             if(Mathf.Abs(x) == Mathf.Abs(z)) { continue; }
-    //             Vector2Int gridPos = position + new Vector2Int(x, z);
-    //             if (!dungeonDictionary.ContainsKey(gridPos))
-    //             {
-    //                 //Spawn Wall
-    //                 Vector3 direction = new Vector3(gridPos.x, 0, gridPos.y) - new Vector3(position.x, 0, position.y);
-    //                 GameObject wall = Instantiate(WallPrefab, new Vector3(position.x, 0, position.y), Quaternion.LookRotation(direction));
-    //                 allSpawnedObjects.Add(wall);
-    //             }
-    //         }
-    //     }
-    // }
+    private void SpawnWallsForTile(Vector2Int position)
+    {
+        for (int x = -1; x <= 1; x++)
+        {
+            for (int z = -1; z <= 1; z++)
+            {
+                if(Mathf.Abs(x) == Mathf.Abs(z)) { continue; }
+                Vector2Int gridPos = position + new Vector2Int(x, z);
+                if (!dungeonDictionary.ContainsKey(gridPos))
+                {
+                    //Spawn Wall
+                    Vector3 direction = new Vector3(gridPos.x, 0, gridPos.y) - new Vector3(position.x, 0, position.y);
+                    GameObject wall = Instantiate(WallPrefab, new Vector3(position.x, 0, position.y), Quaternion.LookRotation(direction), GameObject.Find("Dungeon").transform);
+                    allSpawnedObjects.Add(wall);
+                }
+            }
+        }
+    }
 
 
     public void GenerateDungeon()
@@ -183,4 +191,5 @@ public class Room
 {
     public Vector2Int position;
     public Vector2Int size;
+    public Vector2Int nonUseSize;
 }
