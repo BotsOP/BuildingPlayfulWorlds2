@@ -5,6 +5,7 @@ using UnityEngine;
 public class UnitController : MonoBehaviour
 {
     UnitSelection unitSelec;
+    GameObject lastSelected;
     void Start()
     {
         unitSelec = gameObject.GetComponent<UnitSelection>();
@@ -27,11 +28,23 @@ public class UnitController : MonoBehaviour
                 if(hit.transform.gameObject.tag == "Enemy")
                 {
                     Debug.Log("I HIT AN ENEMY");
+
+                    if(unitSelec.unitSelectionList.Count != 0)
+                    {
+                        if(lastSelected != null)
+                        lastSelected.GetComponent<Outline>().enabled = false;
+
+                    lastSelected = hit.transform.gameObject;
+                    lastSelected.GetComponent<Outline>().enabled = true;
+                    }
+
                     AttackUnit(hit);
                 }
                 else
                 {
-                    MoveUnit(hit);
+                    Vector3 moveToPos = hit.point;
+                    MoveUnit(moveToPos);
+                    lastSelected.GetComponent<Outline>().enabled = false;
                 }
             }
         }
@@ -40,7 +53,7 @@ public class UnitController : MonoBehaviour
     void AttackUnit(RaycastHit hit)
     {
         Vector3 moveToPos = hit.point;
-        List<Vector3> targetPositionList = GetPositionListAround(moveToPos, new float[] { 1.5f, 3f, 4.5f }, new int[] { 5, 10, 20 });
+        List<Vector3> targetPositionList = GetPositionListAround(moveToPos, new float[] { 0.75f, 1.5f, 2.25f }, new int[] { 5, 10, 20 });
 
         int targetPositionIndex = 0;
 
@@ -48,6 +61,7 @@ public class UnitController : MonoBehaviour
         {
             if (unit.isActive)
             {
+                unit.SetUnitState(1);
                 unit.targetFinder.targetList.Insert(0, hit.collider.gameObject);
                 unit.WalkTo(targetPositionList[targetPositionIndex]);
                 targetPositionIndex = (targetPositionIndex + 1) % targetPositionList.Count;
@@ -55,9 +69,8 @@ public class UnitController : MonoBehaviour
         }
     }
 
-    void MoveUnit(RaycastHit hit)
+    public void MoveUnit(Vector3 moveToPos)
     {
-        Vector3 moveToPos = hit.point;
         List<Vector3> targetPositionList = GetPositionListAround(moveToPos, new float[] { 1.5f, 3f, 4.5f }, new int[] { 5, 10, 20 });
 
         int targetPositionIndex = 0;
@@ -66,6 +79,8 @@ public class UnitController : MonoBehaviour
         {
             if (unit.isActive)
             {
+                unit.SetUnitState(0);
+                unit.agent.isStopped = false;
                 unit.WalkTo(targetPositionList[targetPositionIndex]);
                 targetPositionIndex = (targetPositionIndex + 1) % targetPositionList.Count;
             }

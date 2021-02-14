@@ -117,11 +117,11 @@ public class UnitSelection : MonoBehaviour
         {
             if(unit.isActive)
             {
-                unit.gameObject.GetComponent<Renderer>().material.color = Color.green;
+                unit.outline.enabled = true;
             }
             else
             {
-                unit.gameObject.GetComponent<Renderer>().material.color = Color.blue;
+                unit.outline.enabled = false;
                 toBeDeleted.Add(unit);
             }
         }

@@ -60,11 +60,15 @@ public class DungeonGenerator: MonoBehaviour
 
     private void AddRoomToDungeon(Room room)
     {
+        int i = 0;
         for (int xx = room.position.x; xx < room.position.x + room.size.x; xx++)
         {
             for (int yy = room.position.y; yy < room.position.y + room.size.y; yy++)
             {
                 Vector2Int pos = new Vector2Int(xx, yy);
+                if(i < 5)
+                Instantiate(EnemyPrefab, new Vector3Int(xx, 0, yy), Quaternion.identity);
+                i++;
                 dungeonDictionary.Add(pos, Tile.Floor);
             }
         }
@@ -132,9 +136,13 @@ public class DungeonGenerator: MonoBehaviour
 
     private void BuildDungeon()
     {
+        int i = 0;
         foreach(KeyValuePair<Vector2Int, Tile> kv in dungeonDictionary)
         {
             GameObject floor = Instantiate(FloorPrefab, new Vector3Int(kv.Key.x, 0, kv.Key.y), Quaternion.identity, GameObject.Find("Dungeon").transform);
+            if(i < 5)
+                Instantiate(EnemyPrefab, new Vector3Int(kv.Key.x, 0, kv.Key.y), Quaternion.identity);
+            i++;
             allSpawnedObjects.Add(floor);
 
             SpawnWallsForTile(kv.Key);

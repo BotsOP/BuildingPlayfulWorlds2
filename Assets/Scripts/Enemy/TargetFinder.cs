@@ -5,6 +5,7 @@ using UnityEngine;
 public class TargetFinder : MonoBehaviour
 {
     SphereCollider sc;
+    public BasicUnitHandler unitHandler;
     public float visuaulRange;
     //public GameObject target;
     public List<GameObject> targetList = new List<GameObject>();
@@ -26,6 +27,7 @@ public class TargetFinder : MonoBehaviour
         else if(other.gameObject.tag == "Enemy" && !isEnemy)
         {
             targetList.Add(other.gameObject);
+            unitHandler.SetUnitState(1);
         }
     }
 }

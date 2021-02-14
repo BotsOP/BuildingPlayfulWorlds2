@@ -30,6 +30,7 @@ public class EnemyAI : MonoBehaviour
     [SerializeField] UnitSelection unitSelec;
     public Slider healthBarSlider;
     public HealthSystem healthSystem;
+    public Outline outline;
 
     void Awake()
     {
@@ -43,9 +44,12 @@ public class EnemyAI : MonoBehaviour
         agent = gameObject.GetComponent<NavMeshAgent>();
         startingPosition = transform.position;
         roamPos = GetRoamingPosition();
+
         healthSystem = gameObject.GetComponent<HealthSystem>();
         healthSystem.health = health;
         healthSystem.healthMax = health;
+
+        unitSelec = GameObject.Find("GameManager").GetComponent<UnitSelection>();
     }
 
     void Update()
@@ -70,6 +74,8 @@ public class EnemyAI : MonoBehaviour
                     Debug.Log("everyone escaped");
                     state = State.GoingBackToStart;
                 }
+                if(targetFinder.targetList[0] == null)
+                    targetFinder.targetList.RemoveAt(0);
                 agent.SetDestination(targetFinder.targetList[0].transform.position);
 
                 if (Vector3.Distance(transform.position, targetFinder.targetList[0].gameObject.transform.position) < attackRange)
@@ -77,7 +83,6 @@ public class EnemyAI : MonoBehaviour
                     agent.isStopped = true;
                     if(Time.time > nextShootTime)
                     {
-                        
                         Slider targetHealthBar = targetFinder.targetList[0].gameObject.GetComponent<BasicUnitHandler>().healthBarSlider;
                         targetFinder.targetList[0].gameObject.GetComponent<HealthSystem>().Damage(damage, targetHealthBar);
 
@@ -131,12 +136,18 @@ public class EnemyAI : MonoBehaviour
 
     void StopChasingCheck()
     {
-        foreach (GameObject target in targetFinder.targetList)
+        for (int i = 0; i < targetFinder.targetList.Count; i++)
         {
-            if (Vector3.Distance(transform.position, target.transform.position) > stopChasingDis)
+            if(targetFinder.targetList[i] == null)
+                targetFinder.targetList.RemoveAt(i);
+            if (Vector3.Distance(transform.position, targetFinder.targetList[i].transform.position) > stopChasingDis)
             {
-                targetFinder.targetList.Remove(target);
+                targetFinder.targetList.Remove(targetFinder.targetList[i]);
             }
         }
+        // foreach (GameObject target in targetFinder.targetList)
+        // {
+            
+        // }
     }
 }
