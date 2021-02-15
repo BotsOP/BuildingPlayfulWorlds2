@@ -74,17 +74,19 @@ public class UnitController : MonoBehaviour
         List<Vector3> targetPositionList = GetPositionListAround(moveToPos, new float[] { 1.5f, 3f, 4.5f }, new int[] { 5, 10, 20 });
 
         int targetPositionIndex = 0;
-
+        int i = 0;
         foreach (BasicUnitHandler unit in unitSelec.unitSelectionList)
         {
-            if (unit.isActive)
+            if (unit.isActive && unit.gameObject.activeSelf)
             {
+                i++;
                 unit.SetUnitState(0);
                 unit.agent.isStopped = false;
                 unit.WalkTo(targetPositionList[targetPositionIndex]);
                 targetPositionIndex = (targetPositionIndex + 1) % targetPositionList.Count;
             }
         }
+        Debug.Log(i + " I have so many units I think");
     }
 
     List<Vector3> GetPositionListAround(Vector3 startPos, float[] ringDistanceArray, int[] ringPositionCountArray)

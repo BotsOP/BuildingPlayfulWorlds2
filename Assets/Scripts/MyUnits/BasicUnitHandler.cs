@@ -57,6 +57,7 @@ public class BasicUnitHandler : MonoBehaviour
 
                     Vector3 moveToPos = targetFinder.targetList[0].transform.position;
                     agent.SetDestination(moveToPos);
+                    transform.LookAt(targetFinder.targetList[0].transform);
 
                     if (Vector3.Distance(transform.position, targetFinder.targetList[0].gameObject.transform.position) < attackRange)
                     {
@@ -73,7 +74,7 @@ public class BasicUnitHandler : MonoBehaviour
 
                                 if (targetFinder.targetList.Count == 0)
                                 {
-                                    agent.SetDestination(new Vector3(moveToPos.x + Random.Range(-2, 2), 0, moveToPos.z + Random.Range(-2, 2)));
+                                    agent.SetDestination(transform.position);
                                     state = State.WalkTo;
                                 }
                             }
@@ -100,5 +101,6 @@ public class BasicUnitHandler : MonoBehaviour
     public void WalkTo(Vector3 pos)
     {
         agent.SetDestination(pos);
+        transform.LookAt(pos);
     }
 }

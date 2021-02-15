@@ -103,8 +103,9 @@ public class UnitSelection : MonoBehaviour
             if (screenPos.x > min.x && screenPos.x < max.x && screenPos.y > min.y && screenPos.y < max.y)
             {
                 BasicUnitHandler unitScript = unit.GetComponent<BasicUnitHandler>();
+                if(!unitScript.isActive)
+                    unitSelectionList.Add(unitScript);
                 unitScript.isActive = true;
-                unitSelectionList.Add(unitScript);
                 WhoIsSelected();
             }
         }
