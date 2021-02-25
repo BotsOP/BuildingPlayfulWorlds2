@@ -37,6 +37,12 @@ public class BasicUnitHandler : MonoBehaviour
         healthSystem = gameObject.GetComponent<HealthSystem>();
         healthSystem.health = health;
         healthSystem.healthMax = health;
+        agent.updateRotation = false;
+    }
+    void LateUpdate()
+    {
+        if(state == State.WalkTo)
+            transform.rotation = Quaternion.LookRotation(agent.velocity.normalized);
     }
 
     void Update()

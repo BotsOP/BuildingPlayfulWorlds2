@@ -59,11 +59,11 @@ public class EnemyAI : MonoBehaviour
             default:
 
             case State.Roaming:
-                agent.SetDestination(roamPos);
-                float reachedPositionDistance = 1f;
+                // agent.SetDestination(roamPos);
+                // float reachedPositionDistance = 1f;
 
-                if (Vector3.Distance(transform.position, roamPos) < reachedPositionDistance)
-                    roamPos = GetRoamingPosition();
+                // if (Vector3.Distance(transform.position, roamPos) < reachedPositionDistance)
+                //     roamPos = GetRoamingPosition();
 
                 FindTarget();
                 break;
