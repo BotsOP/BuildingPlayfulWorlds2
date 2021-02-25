@@ -53,20 +53,22 @@ public class BasicUnitHandler : MonoBehaviour
 
             case State.WalkTo:
                 agent.isStopped = false;
+                Debug.Log("walk to");
                 break;
 
             case State.Attack:
                 if (targetFinder.targetList.Count != 0)
                 {
-                    if(targetFinder.targetList[0] == null)
-                        targetFinder.targetList.RemoveAt(0);
+                    foreach (GameObject target in targetFinder.targetList)
+                    {
+                        if(target == null)
+                            targetFinder.targetList.Remove(target);
+                    }
 
-                    Vector3 moveToPos = targetFinder.targetList[0].transform.position;
-                    agent.SetDestination(moveToPos);
-                    transform.LookAt(targetFinder.targetList[0].transform);
-
+                    //Debug.Log(transform.position + "   " + targetFinder.targetList[0].gameObject.transform.position + "   " + attackRange);
                     if (Vector3.Distance(transform.position, targetFinder.targetList[0].gameObject.transform.position) < attackRange)
                     {
+                        
                         agent.isStopped = true;
                         if (Time.time > nextShootTime)
                         {
@@ -86,7 +88,14 @@ public class BasicUnitHandler : MonoBehaviour
                             }
                             nextShootTime = Time.time + fireRate;
                         }
+                        return;
                     }
+                    Debug.Log("walking");
+                    agent.isStopped = false;
+                    Vector3 moveToPos = targetFinder.targetList[0].transform.position;
+                    agent.SetDestination(moveToPos);
+                    transform.LookAt(targetFinder.targetList[0].transform);
+                    
                 }
                 else
                     state = State.WalkTo;

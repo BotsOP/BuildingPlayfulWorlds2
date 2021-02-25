@@ -158,7 +158,7 @@ public class DungeonGenerator: MonoBehaviour
     {
         for (int roomIndex = 1; roomIndex < roomList.Count; roomIndex++)
         {
-            Vector2 placeEnemiesCorner = new Vector2(roomList[roomIndex].position.x + (roomList[roomIndex].size.x / 3), roomList[roomIndex].position.y + (roomList[roomIndex].size.y / 3));
+            Vector2 placeEnemiesCorner = new Vector2(roomList[roomIndex].position.x + (roomList[roomIndex].size.x / 2.5f), roomList[roomIndex].position.y + (roomList[roomIndex].size.y / 2.5f));
                 for (int x = 0; x < roomList[roomIndex].size.x / 4; x++)
                 {
                     for (int y = 0; y < roomList[roomIndex].size.y / 4; y++)
