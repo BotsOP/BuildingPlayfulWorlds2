@@ -27,6 +27,8 @@ public class EnemyAI : MonoBehaviour
     State state;
     NavMeshAgent agent;
     TargetFinder targetFinder;
+    float miniumRoamingDelay = 10f;
+    float NextTime;
     [SerializeField] UnitSelection unitSelec;
     public Slider healthBarSlider;
     public HealthSystem healthSystem;
@@ -59,11 +61,15 @@ public class EnemyAI : MonoBehaviour
             default:
 
             case State.Roaming:
-                // agent.SetDestination(roamPos);
-                // float reachedPositionDistance = 1f;
+                if(Time.time > NextTime)
+                {
+                    agent.SetDestination(roamPos);
+                    NextTime = Time.time + Random.Range(miniumRoamingDelay, miniumRoamingDelay * 5);
+                }
 
-                // if (Vector3.Distance(transform.position, roamPos) < reachedPositionDistance)
-                //     roamPos = GetRoamingPosition();
+                float reachedPositionDistance = 1f;
+                if (Vector3.Distance(transform.position, roamPos) < reachedPositionDistance)
+                        roamPos = GetRoamingPosition();
 
                 FindTarget();
                 break;
@@ -74,8 +80,13 @@ public class EnemyAI : MonoBehaviour
                     Debug.Log("everyone escaped");
                     state = State.GoingBackToStart;
                 }
-                if(targetFinder.targetList[0] == null)
-                    targetFinder.targetList.RemoveAt(0);
+
+                foreach (GameObject target in targetFinder.targetList)
+                {
+                    if(target == null)
+                        targetFinder.targetList.Remove(target);
+                }
+                
                 agent.SetDestination(targetFinder.targetList[0].transform.position);
 
                 if (Vector3.Distance(transform.position, targetFinder.targetList[0].gameObject.transform.position) < attackRange)
@@ -99,7 +110,6 @@ public class EnemyAI : MonoBehaviour
                         nextShootTime = Time.time + fireRate;
                     }
                 }
-
                 else
                     agent.isStopped = false;
 

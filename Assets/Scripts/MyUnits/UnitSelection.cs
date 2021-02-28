@@ -6,9 +6,15 @@ public class UnitSelection : MonoBehaviour
 {
     public RectTransform selectionBox;
     public List<BasicUnitHandler> unitSelectionList = new List<BasicUnitHandler>();
-
+    public GameObject inventory;
+    Outline baseOutline;
     Vector2 startPos;
     bool selectedGround;
+
+    void Start()
+    {
+        baseOutline = GameObject.Find("Base").GetComponent<Outline>();
+    }
 
     void Update()
     {
@@ -41,10 +47,9 @@ public class UnitSelection : MonoBehaviour
                     selectedGround = false;
                     WhoIsSelected();
                 }
+
                 else
-                {
                     selectedGround = true;
-                }
             }
         }
         
@@ -65,10 +70,22 @@ public class UnitSelection : MonoBehaviour
                     selectedGround = false;
                     WhoIsSelected();
                 }
+                
+                else if(hit.transform.gameObject.name == "Base")
+                {
+                    DeselectAll();
+                    WhoIsSelected();
+                    baseOutline.enabled = true;
+                    inventory.SetActive(true);
+                }
+
                 else
                 {
                     selectedGround = true;
+                    baseOutline.enabled = false;
+                    inventory.SetActive(false);
                 }
+                    
             }
         }
 

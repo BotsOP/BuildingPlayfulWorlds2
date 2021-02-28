@@ -53,7 +53,7 @@ public class BasicUnitHandler : MonoBehaviour
 
             case State.WalkTo:
                 agent.isStopped = false;
-                Debug.Log("walk to");
+                //Debug.Log("walk to");
                 break;
 
             case State.Attack:
