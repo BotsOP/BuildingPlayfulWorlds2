@@ -10,9 +10,10 @@ public class DungeonGenerator: MonoBehaviour
     [Header("Prefabs")]
     public GameObject[] FloorPrefab;
     public GameObject[] WallPrefab;
+    public GameObject[] CampsitePrefab;
     public GameObject TorchPrefab;
     public GameObject EnemyPrefab;
-    public NavMeshSurface surface;
+    public NavMeshSurface Surface;
 
 
     [Header("Dungeon Settings")]
@@ -35,8 +36,6 @@ public class DungeonGenerator: MonoBehaviour
         AllocateCorridors();
         BuildDungeon();
         PlaceEnemies();
-
-        Debug.Log(roomList.Count);
     }
     private void AddPrebuildRooms()
     {
@@ -162,22 +161,16 @@ public class DungeonGenerator: MonoBehaviour
             SpawnWallsForTile(kv.Key);
         }
 
-        surface.BuildNavMesh();
+        Surface.BuildNavMesh();
     }
 
     private void PlaceEnemies()
     {
         for (int roomIndex = 1; roomIndex < roomList.Count; roomIndex++)
         {
-            Vector2 placeEnemiesCorner = new Vector2(roomList[roomIndex].position.x + (roomList[roomIndex].size.x / 2.5f), roomList[roomIndex].position.y + (roomList[roomIndex].size.y / 2.5f));
-                for (int x = 0; x < roomList[roomIndex].size.x / 4; x++)
-                {
-                    for (int y = 0; y < roomList[roomIndex].size.y / 4; y++)
-                    {
-                        Vector3 enemySpawnPos = new Vector3(placeEnemiesCorner.x + x, 0, placeEnemiesCorner.y + y);
-                        Instantiate(EnemyPrefab, enemySpawnPos, Quaternion.identity);
-                    }
-                }
+            Vector3 randomRotation = new Vector3(0, Random.Range(1,5) * 90, 0);
+            Vector3 roomPosition = new Vector3(roomList[roomIndex].position.x + roomList[roomIndex].size.x / 2, 0, roomList[roomIndex].position.y + roomList[roomIndex].size.y / 2);
+            Instantiate(CampsitePrefab[0], roomPosition, Quaternion.Euler(randomRotation));
         }
     }
 

@@ -35,4 +35,12 @@ public class TargetFinder : MonoBehaviour
             unitHandler.SetUnitState(1);
         }
     }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if(other.gameObject.tag == "MyUnit" && isEnemy)
+        {
+            targetList.Remove(other.gameObject);
+        }
+    }
 }

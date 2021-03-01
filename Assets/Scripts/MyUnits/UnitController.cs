@@ -86,7 +86,6 @@ public class UnitController : MonoBehaviour
                 targetPositionIndex = (targetPositionIndex + 1) % targetPositionList.Count;
             }
         }
-        Debug.Log(i + " I have so many units I think");
     }
 
     List<Vector3> GetPositionListAround(Vector3 startPos, float[] ringDistanceArray, int[] ringPositionCountArray)

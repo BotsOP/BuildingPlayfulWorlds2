@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1309378004475982393}
   - component: {fileID: 1309378004475982392}
   - component: {fileID: 1309378004475982395}
+  - component: {fileID: 3262426694643421859}
   m_Layer: 0
   m_Name: Campsite 1
   m_TagString: Untagged
@@ -77,8 +78,24 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 17.312374, y: 1.0830066, z: 18.547417}
-  m_Center: {x: 0.31124496, y: 0.5805521, z: -0.02376175}
+  m_Size: {x: 25.378435, y: 1.0830066, z: 23.867733}
+  m_Center: {x: -0.1799097, y: 0.5805521, z: 0.82162046}
+--- !u!54 &3262426694643421859
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1309378004475982394}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 0
 --- !u!1 &1309378004647447681
 GameObject:
   m_ObjectHideFlags: 0

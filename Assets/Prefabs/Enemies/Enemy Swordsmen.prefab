@@ -154,7 +154,7 @@ MonoBehaviour:
   fireRate: 1
   damage: 30
   stopChasingDis: 11
-  startingArea: 5
+  startingArea: 1
   health: 100
   targetFinder: {fileID: 0}
   unitSelec: {fileID: 0}

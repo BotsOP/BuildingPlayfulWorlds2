@@ -71,7 +71,6 @@ public class EnemyAI : MonoBehaviour
             case State.ChaseTarget:
                 if (targetFinder.targetList.Count == 0)
                 {
-                    Debug.Log("everyone escaped");
                     state = State.GoingBackToStart;
                 }
 
@@ -107,9 +106,6 @@ public class EnemyAI : MonoBehaviour
                 else
                     agent.isStopped = false;
 
-                if(targetFinder.targetList.Count != 0)
-                    StopChasingCheck();
-
                 break;
             case State.GoingBackToStart:
                 agent.SetDestination(startingPosition);
@@ -138,6 +134,7 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
+    //need to redo this func with new campsite mechanic
     void StopChasingCheck()
     {
         for (int i = 0; i < targetFinder.targetList.Count; i++)
@@ -146,7 +143,7 @@ public class EnemyAI : MonoBehaviour
                 targetFinder.targetList.RemoveAt(i);
             if (Vector3.Distance(transform.position, targetFinder.targetList[i].transform.position) > stopChasingDis)
             {
-                targetFinder.targetList.Remove(targetFinder.targetList[i]);
+                //targetFinder.targetList.Remove(targetFinder.targetList[i]);
             }
         }
         // foreach (GameObject target in targetFinder.targetList)

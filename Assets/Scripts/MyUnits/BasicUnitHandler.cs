@@ -90,7 +90,6 @@ public class BasicUnitHandler : MonoBehaviour
                         }
                         return;
                     }
-                    Debug.Log("walking");
                     agent.isStopped = false;
                     Vector3 moveToPos = targetFinder.targetList[0].transform.position;
                     agent.SetDestination(moveToPos);
