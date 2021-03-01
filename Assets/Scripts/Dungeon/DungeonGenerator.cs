@@ -10,6 +10,7 @@ public class DungeonGenerator: MonoBehaviour
     [Header("Prefabs")]
     public GameObject[] FloorPrefab;
     public GameObject[] WallPrefab;
+    public GameObject TorchPrefab;
     public GameObject EnemyPrefab;
     public NavMeshSurface surface;
 
@@ -26,9 +27,28 @@ public class DungeonGenerator: MonoBehaviour
     private Dictionary<Vector2Int, Tile> dungeonDictionary = new Dictionary<Vector2Int, Tile>();
     private List<Room> roomList = new List<Room>();
     private List<GameObject> allSpawnedObjects = new List<GameObject>();
+    int torchAmount;
     void Start()
     {
-        GenerateDungeon();
+        AddPrebuildRooms();
+        AllocateRooms();
+        AllocateCorridors();
+        BuildDungeon();
+        PlaceEnemies();
+
+        Debug.Log(roomList.Count);
+    }
+    private void AddPrebuildRooms()
+    {
+        int widthRoom = 20;
+        int heightRoom = 20;
+        Room room = new Room()
+        {
+            position = new Vector2Int(width/2 - widthRoom/2, height/2 - heightRoom/2),
+            size = new Vector2Int(widthRoom,heightRoom)
+        };
+
+        AddRoomToDungeon(room);
     }
 
     private void AllocateRooms()
@@ -66,10 +86,6 @@ public class DungeonGenerator: MonoBehaviour
             for (int yy = room.position.y; yy < room.position.y + room.size.y; yy++)
             {
                 Vector2Int pos = new Vector2Int(xx, yy);
-
-                // if(i < 5){
-                //     Instantiate(EnemyPrefab, new Vector3Int(xx, 0, yy), Quaternion.identity);
-                // }
                 i++;
                 dungeonDictionary.Add(pos, Tile.Floor);
             }
@@ -138,14 +154,9 @@ public class DungeonGenerator: MonoBehaviour
 
     private void BuildDungeon()
     {
-        int i = 0;
         foreach(KeyValuePair<Vector2Int, Tile> kv in dungeonDictionary)
         {
             GameObject floor = Instantiate(FloorPrefab[SelectRandomFloor()], new Vector3Int(kv.Key.x, 0, kv.Key.y), Quaternion.identity, GameObject.Find("Dungeon").transform);
-            // if(i < 5)
-            //     Instantiate(EnemyPrefab, new Vector3Int(kv.Key.x, 0, kv.Key.y), Quaternion.identity);
-            // i++;
-            //Debug.Log(Random.Range(0, WallPrefab.Length));
             allSpawnedObjects.Add(floor);
 
             SpawnWallsForTile(kv.Key);
@@ -179,20 +190,10 @@ public class DungeonGenerator: MonoBehaviour
             return Random.Range(1, FloorPrefab.Length);
     }
 
-    private void AddPrebuildRooms()
-    {
-        int widthRoom = 20;
-        int heightRoom = 20;
-        Room room = new Room()
-        {
-            position = new Vector2Int(width/2 - widthRoom/2, height/2 - heightRoom/2),
-            size = new Vector2Int(widthRoom,heightRoom)
-        };
-
-        AddRoomToDungeon(room);
-    }
+    
     private void SpawnWallsForTile(Vector2Int position)
     {
+        int spawnTorchEverySoManyWalls = 5;
         for (int x = -1; x <= 1; x++)
         {
             for (int z = -1; z <= 1; z++)
@@ -205,21 +206,13 @@ public class DungeonGenerator: MonoBehaviour
                     Vector3 direction = new Vector3(gridPos.x, 0, gridPos.y) - new Vector3(position.x, 0, position.y);
                     GameObject wall = Instantiate(WallPrefab[Random.Range(0, WallPrefab.Length)], new Vector3(position.x, 0, position.y), Quaternion.LookRotation(direction), GameObject.Find("Dungeon").transform);
                     allSpawnedObjects.Add(wall);
+                    if(torchAmount % spawnTorchEverySoManyWalls == 0){
+                        Instantiate(TorchPrefab, new Vector3(position.x, 0, position.y), Quaternion.LookRotation(direction), GameObject.Find("Dungeon").transform);
+                    }
+                    torchAmount++;
                 }
             }
         }
-    }
-
-
-    public void GenerateDungeon()
-    {
-        AddPrebuildRooms();
-        AllocateRooms();
-        AllocateCorridors();
-        BuildDungeon();
-        PlaceEnemies();
-
-        Debug.Log(roomList.Count);
     }
 
 }

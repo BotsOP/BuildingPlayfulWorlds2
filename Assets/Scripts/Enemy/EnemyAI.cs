@@ -16,29 +16,23 @@ public class EnemyAI : MonoBehaviour
     Vector3 startingPosition;
     Vector3 roamPos;
     [SerializeField] float attackRange;
-    [SerializeField] float visualRange;
+    //[SerializeField] float visualRange;
     [SerializeField] float fireRate;
     [SerializeField] float damage;
     [SerializeField] float stopChasingDis;
     [SerializeField] float startingArea;
     [SerializeField] float health;
+    [SerializeField] TargetFinder targetFinder;
     float nextShootTime;
 
     State state;
     NavMeshAgent agent;
-    TargetFinder targetFinder;
     float miniumRoamingDelay = 10f;
     float NextTime;
     [SerializeField] UnitSelection unitSelec;
     public Slider healthBarSlider;
     public HealthSystem healthSystem;
     public Outline outline;
-
-    void Awake()
-    {
-        targetFinder = transform.GetChild(0).gameObject.GetComponent<TargetFinder>();
-        targetFinder.visuaulRange = visualRange;
-    }
 
     void Start()
     {

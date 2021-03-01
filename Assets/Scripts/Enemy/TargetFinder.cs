@@ -4,18 +4,23 @@ using UnityEngine;
 
 public class TargetFinder : MonoBehaviour
 {
-    SphereCollider sc;
     public BasicUnitHandler unitHandler;
     public float visuaulRange;
-    //public GameObject target;
     public List<GameObject> targetList = new List<GameObject>();
 
     [SerializeField] bool isEnemy;
+    SphereCollider sc;
+    BoxCollider bc;
 
     private void Start()
     {
-        sc = gameObject.GetComponent<SphereCollider>();
-        sc.radius = visuaulRange;
+        if(!isEnemy)
+        {
+            sc = gameObject.GetComponent<SphereCollider>();
+            sc.radius = visuaulRange;
+            return;
+        }
+        bc = gameObject.GetComponent<BoxCollider>();
     }
 
     private void OnTriggerEnter(Collider other)
