@@ -25,6 +25,8 @@ public class BasicUnitHandler : MonoBehaviour
     public TargetFinder targetFinder;
     public Outline outline;
     float nextShootTime;
+    public List<GameObject> targetListToBeRemoved = new List<GameObject>();
+
     void Awake()
     {
         targetFinder = transform.GetChild(0).gameObject.GetComponent<TargetFinder>();
@@ -62,21 +64,28 @@ public class BasicUnitHandler : MonoBehaviour
                     foreach (GameObject target in targetFinder.targetList)
                     {
                         if(target == null)
-                            targetFinder.targetList.Remove(target);
+                            targetListToBeRemoved.Add(target);
                     }
 
-                    //Debug.Log(transform.position + "   " + targetFinder.targetList[0].gameObject.transform.position + "   " + attackRange);
-                    if (Vector3.Distance(transform.position, targetFinder.targetList[0].gameObject.transform.position) < attackRange)
+                    foreach (GameObject target in targetListToBeRemoved)
+                    {
+                        targetFinder.targetList.Remove(target);
+                    }
+                    targetListToBeRemoved.Clear();
+
+                    GameObject firstTarget = targetFinder.targetList[0];
+
+                    if (Vector3.Distance(transform.position, firstTarget.gameObject.transform.position) < attackRange)
                     {
                         
                         agent.isStopped = true;
                         if (Time.time > nextShootTime)
                         {
-                            Debug.DrawRay(transform.position, targetFinder.targetList[0].gameObject.transform.position - transform.position, Color.green);
-                            Slider targetHealthBar = targetFinder.targetList[0].gameObject.GetComponent<EnemyAI>().healthBarSlider;
-                            targetFinder.targetList[0].gameObject.GetComponent<HealthSystem>().Damage(damage, targetHealthBar);
+                            Debug.DrawRay(transform.position, firstTarget.gameObject.transform.position - transform.position, Color.green);
+                            Slider targetHealthBar = firstTarget.gameObject.GetComponent<EnemyAI>().healthBarSlider;
+                            firstTarget.gameObject.GetComponent<HealthSystem>().Damage(damage, targetHealthBar);
 
-                            if (targetFinder.targetList[0].gameObject.GetComponent<HealthSystem>().health == 0)
+                            if (firstTarget.gameObject.GetComponent<HealthSystem>().health == 0)
                             {
                                 targetFinder.targetList.RemoveAt(0);
 
@@ -91,9 +100,9 @@ public class BasicUnitHandler : MonoBehaviour
                         return;
                     }
                     agent.isStopped = false;
-                    Vector3 moveToPos = targetFinder.targetList[0].transform.position;
+                    Vector3 moveToPos = firstTarget.transform.position;
                     agent.SetDestination(moveToPos);
-                    transform.LookAt(targetFinder.targetList[0].transform);
+                    transform.LookAt(firstTarget.transform);
                     
                 }
                 else

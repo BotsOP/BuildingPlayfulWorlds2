@@ -44,7 +44,9 @@ public class UnitController : MonoBehaviour
                 {
                     Vector3 moveToPos = hit.point;
                     MoveUnit(moveToPos);
-                    lastSelected.GetComponent<Outline>().enabled = false;
+
+                    if(lastSelected != null)
+                        lastSelected.GetComponent<Outline>().enabled = false;
                 }
             }
         }
