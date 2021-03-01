@@ -116,16 +116,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc9bb29ba2846254589f45ec6459eda7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 80
   healthBarSlider: {fileID: 6410347876025804827}
   healthSystem: {fileID: 7861656566337799234}
   isActive: 0
+  targetFinder: {fileID: 0}
+  outline: {fileID: 6370103664449734042}
+  health: 80
   visualRange: 16
   attackRange: 13
   fireRate: 1
   damage: 30
-  targetFinder: {fileID: 0}
-  outline: {fileID: 6370103664449734042}
+  unitSelection: {fileID: 0}
 --- !u!114 &7861656566337799234
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.AI;
 
-public class EnemyAI : MonoBehaviour
+public class EnemyAI : MonoBehaviour, IDamagable
 {
     enum State
     {
@@ -13,25 +13,24 @@ public class EnemyAI : MonoBehaviour
         GoingBackToStart,
     }
 
-    Vector3 startingPosition;
-    Vector3 roamPos;
+    [SerializeField] Slider healthBarSlider;
     [SerializeField] float attackRange;
     //[SerializeField] float visualRange;
     [SerializeField] float fireRate;
-    [SerializeField] float damage;
+    [SerializeField] int damage;
     [SerializeField] float stopChasingDis;
     [SerializeField] float startingArea;
     [SerializeField] float health;
     [SerializeField] TargetFinder targetFinder;
     float nextShootTime;
+    float maxHealth;
+    Vector3 startingPosition;
+    Vector3 roamPos;
 
     State state;
     NavMeshAgent agent;
     float miniumRoamingDelay = 10f;
     float NextTime;
-    [SerializeField] UnitSelection unitSelec;
-    public Slider healthBarSlider;
-    public HealthSystem healthSystem;
     public Outline outline;
 
     void Start()
@@ -41,11 +40,7 @@ public class EnemyAI : MonoBehaviour
         startingPosition = transform.position;
         roamPos = GetRoamingPosition();
 
-        healthSystem = gameObject.GetComponent<HealthSystem>();
-        healthSystem.health = health;
-        healthSystem.healthMax = health;
-
-        unitSelec = GameObject.Find("GameManager").GetComponent<UnitSelection>();
+        maxHealth = health;
     }
 
     void Update()
@@ -71,7 +66,9 @@ public class EnemyAI : MonoBehaviour
             case State.ChaseTarget:
                 if (targetFinder.targetList.Count == 0)
                 {
+                    Debug.Log("test");
                     state = State.GoingBackToStart;
+                    break;
                 }
 
                 foreach (GameObject target in targetFinder.targetList)
@@ -79,27 +76,27 @@ public class EnemyAI : MonoBehaviour
                     if(target == null)
                         targetFinder.targetList.Remove(target);
                 }
-                
-                agent.SetDestination(targetFinder.targetList[0].transform.position);
 
-                if (Vector3.Distance(transform.position, targetFinder.targetList[0].gameObject.transform.position) < attackRange)
+                GameObject firstTarget = targetFinder.targetList[0];
+                
+                agent.SetDestination(firstTarget.transform.position);
+
+                if (Vector3.Distance(transform.position, firstTarget.gameObject.transform.position) < attackRange)
                 {
                     agent.isStopped = true;
                     if(Time.time > nextShootTime)
                     {
-                        Slider targetHealthBar = targetFinder.targetList[0].gameObject.GetComponent<BasicUnitHandler>().healthBarSlider;
-                        targetFinder.targetList[0].gameObject.GetComponent<HealthSystem>().Damage(damage, targetHealthBar);
+                        firstTarget.gameObject.GetComponent<IDamagable>().DealDamage(damage);
 
-                        if(targetFinder.targetList[0].gameObject.GetComponent<HealthSystem>().health == 0)
-                        {
-                            unitSelec.unitSelectionList.Remove(targetFinder.targetList[0].GetComponent<BasicUnitHandler>());
-                            targetFinder.targetList.RemoveAt(0);
-                            if (targetFinder.targetList.Count == 0)
-                            {
-                                agent.isStopped = false;
-                                state = State.GoingBackToStart;
-                            }
-                        }
+                        // if(firstTarget.gameObject.GetComponent<HealthSystem>().health == 0)
+                        // {
+                        //     targetFinder.targetList.RemoveAt(0);
+                        //     if (targetFinder.targetList.Count == 0)
+                        //     {
+                        //         agent.isStopped = false;
+                        //         state = State.GoingBackToStart;
+                        //     }
+                        // }
                         nextShootTime = Time.time + fireRate;
                     }
                 }
@@ -150,5 +147,15 @@ public class EnemyAI : MonoBehaviour
         // {
             
         // }
+    }
+
+    public void DealDamage(int damage)
+    {
+        health -= damage;
+        healthBarSlider.value = health / maxHealth;
+        if(health <= 0)
+        {
+            Destroy(gameObject);
+        }
     }
 }

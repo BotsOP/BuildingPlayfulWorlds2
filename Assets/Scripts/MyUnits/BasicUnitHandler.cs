@@ -4,28 +4,28 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.AI;
 
-public class BasicUnitHandler : MonoBehaviour
+public class BasicUnitHandler : MonoBehaviour, IDamagable
 {
     enum State
     {
         WalkTo,
         Attack,
     }
-    State state;
+    public Slider healthBarSlider;
+    public bool isActive;
+    public TargetFinder targetFinder;
+    public Outline outline;
     [SerializeField] float health;
     [System.NonSerialized] public NavMeshAgent agent; 
-    public Slider healthBarSlider;
-    public HealthSystem healthSystem;
-    public bool isActive;
     [SerializeField] float visualRange;
     [SerializeField] float attackRange;
     [SerializeField] float fireRate;
-    [SerializeField] float damage;
-
-    public TargetFinder targetFinder;
-    public Outline outline;
+    [SerializeField] int damage;
+    [SerializeField] UnitSelection unitSelection;
+    float maxHealth;
     float nextShootTime;
-    public List<GameObject> targetListToBeRemoved = new List<GameObject>();
+    State state;
+    List<GameObject> targetListToBeRemoved = new List<GameObject>();
 
     void Awake()
     {
@@ -35,10 +35,11 @@ public class BasicUnitHandler : MonoBehaviour
 
     void Start()
     {
+        maxHealth = health;
+
+        unitSelection = FindObjectOfType<UnitSelection>();
+
         agent = gameObject.GetComponent<NavMeshAgent>();
-        healthSystem = gameObject.GetComponent<HealthSystem>();
-        healthSystem.health = health;
-        healthSystem.healthMax = health;
         agent.updateRotation = false;
     }
     void LateUpdate()
@@ -82,19 +83,18 @@ public class BasicUnitHandler : MonoBehaviour
                         if (Time.time > nextShootTime)
                         {
                             Debug.DrawRay(transform.position, firstTarget.gameObject.transform.position - transform.position, Color.green);
-                            Slider targetHealthBar = firstTarget.gameObject.GetComponent<EnemyAI>().healthBarSlider;
-                            firstTarget.gameObject.GetComponent<HealthSystem>().Damage(damage, targetHealthBar);
+                            firstTarget.gameObject.GetComponent<IDamagable>().DealDamage(damage);
 
-                            if (firstTarget.gameObject.GetComponent<HealthSystem>().health == 0)
-                            {
-                                targetFinder.targetList.RemoveAt(0);
+                            // if (firstTarget.gameObject.GetComponent<HealthSystem>().health == 0)
+                            // {
+                            //     targetFinder.targetList.RemoveAt(0);
 
-                                if (targetFinder.targetList.Count == 0)
-                                {
-                                    agent.SetDestination(transform.position);
-                                    state = State.WalkTo;
-                                }
-                            }
+                            //     if (targetFinder.targetList.Count == 0)
+                            //     {
+                            //         agent.SetDestination(transform.position);
+                            //         state = State.WalkTo;
+                            //     }
+                            // }
                             nextShootTime = Time.time + fireRate;
                         }
                         return;
@@ -125,5 +125,16 @@ public class BasicUnitHandler : MonoBehaviour
     {
         agent.SetDestination(pos);
         transform.LookAt(pos);
+    }
+
+    public void DealDamage(int damage)
+    {
+        health -= damage;
+        healthBarSlider.value = health / maxHealth;
+        if(health <= 0)
+        {
+            unitSelection.unitSelectionList.Remove(this);
+            Destroy(gameObject);
+        }
     }
 }
