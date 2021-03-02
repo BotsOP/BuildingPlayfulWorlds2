@@ -56,7 +56,6 @@ public class BasicUnitHandler : MonoBehaviour, IDamagable
 
             case State.WalkTo:
                 agent.isStopped = false;
-                //Debug.Log("walk to");
                 break;
 
             case State.Attack:
@@ -78,23 +77,11 @@ public class BasicUnitHandler : MonoBehaviour, IDamagable
 
                     if (Vector3.Distance(transform.position, firstTarget.gameObject.transform.position) < attackRange)
                     {
-                        
                         agent.isStopped = true;
                         if (Time.time > nextShootTime)
                         {
                             Debug.DrawRay(transform.position, firstTarget.gameObject.transform.position - transform.position, Color.green);
                             firstTarget.gameObject.GetComponent<IDamagable>().DealDamage(damage);
-
-                            // if (firstTarget.gameObject.GetComponent<HealthSystem>().health == 0)
-                            // {
-                            //     targetFinder.targetList.RemoveAt(0);
-
-                            //     if (targetFinder.targetList.Count == 0)
-                            //     {
-                            //         agent.SetDestination(transform.position);
-                            //         state = State.WalkTo;
-                            //     }
-                            // }
                             nextShootTime = Time.time + fireRate;
                         }
                         return;

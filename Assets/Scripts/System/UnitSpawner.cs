@@ -4,30 +4,50 @@ using UnityEngine;
 
 public class UnitSpawner : MonoBehaviour
 {
-    public TMPro.TMP_Dropdown dropdown;
-    public GameObject[] UnitList;
-    public Transform spawnTransform;
+    [SerializeField] TMPro.TMP_Dropdown dropdown;
+    [SerializeField] GameObject[] UnitList;
+    [SerializeField] int swordsmenCost;
+    [SerializeField] int mageCost;
+    [SerializeField] int bigMageCost;
+    [SerializeField] int bigSwordsmenCost;
+    [SerializeField] Transform spawnTransform;
+    GameManager gameManager;
+    void Start()
+    {
+        gameManager = FindObjectOfType<GameManager>();
+    }
 
     public void SpawnUnit()
     {
-        switch (dropdown.value) 
+        switch (dropdown.value)
         {
             case 0:
-                Instantiate(UnitList[0], spawnTransform);
+                if(gameManager.money >= swordsmenCost)
+                {
+                    Instantiate(UnitList[0], spawnTransform);
+                    gameManager.money -= swordsmenCost;
+                }
                 break;
             case 1:
+                if(gameManager.money >= mageCost)
+                {
+                    Instantiate(UnitList[1], spawnTransform);
+                    gameManager.money -= mageCost;
+                }
                 break;
             case 2:
-                Instantiate(UnitList[1]);
+                if(gameManager.money >= bigMageCost && gameManager.allowBigMage)
+                {
+                    Instantiate(UnitList[2], spawnTransform);
+                    gameManager.money -= bigMageCost;
+                }
                 break;
             case 3:
-                Instantiate(UnitList[2]);
-                break;
-            case 4:
-                Instantiate(UnitList[3]);
-                break;
-            case 5:
-                Instantiate(UnitList[4]);
+                if(gameManager.money >= bigSwordsmenCost && gameManager.allowBigSwordsmen)
+                {
+                    Instantiate(UnitList[3], spawnTransform);
+                    gameManager.money -= bigSwordsmenCost;
+                }
                 break;
             default:
                 print ("Value exceeds switch cases");

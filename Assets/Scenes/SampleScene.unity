@@ -505,7 +505,7 @@ Transform:
   m_Children:
   - {fileID: 1823427195}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &100759588
 MonoBehaviour:
@@ -526,6 +526,10 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  swordsmenCost: 10
+  mageCost: 15
+  bigMageCost: 35
+  bigSwordsmenCost: 25
   spawnTransform: {fileID: 1823427195}
 --- !u!114 &100759589
 MonoBehaviour:
@@ -589,7 +593,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &116664544
 GameObject:
@@ -639,7 +643,7 @@ Transform:
   m_Children:
   - {fileID: 963194228}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &134873257
 PrefabInstance:
@@ -1801,6 +1805,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7610bca2de81c8f42810c250aab1156c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  money: 0
+  allowBigMage: 0
+  allowBigSwordsmen: 0
 --- !u!1 &523944202
 GameObject:
   m_ObjectHideFlags: 0
@@ -3577,7 +3584,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1504739266
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4610,7 +4617,7 @@ RectTransform:
   - {fileID: 1054346870}
   - {fileID: 25616591}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -4998,7 +5005,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2055690795
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5203,9 +5210,9 @@ MonoBehaviour:
   - {fileID: 6481845735463356005, guid: 47ebe1b76ec4ec14695b0f187ec7d66b, type: 3}
   CampsitePrefab:
   - {fileID: 1309378004475982394, guid: d6cae037334d7b84292b5b12aa68d57c, type: 3}
+  - {fileID: 7303098022401815724, guid: 1de85f2e43548c7429ecb8895165c985, type: 3}
   TorchPrefab: {fileID: 5943496515209586939, guid: 67797c701358b454ba1e778afdfe0290,
     type: 3}
-  EnemyPrefab: {fileID: 0}
   Surface: {fileID: 2110294063}
   amountRooms: 20
   width: 100

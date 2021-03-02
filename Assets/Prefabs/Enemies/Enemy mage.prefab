@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 7009792034411034201}
   - component: {fileID: 4951439547884448992}
   - component: {fileID: 8888019329912677729}
-  - component: {fileID: 4215757318980874564}
   - component: {fileID: 2101848562656317304}
   - component: {fileID: 2173845240464010848}
   m_Layer: 0
@@ -124,20 +123,6 @@ NavMeshAgent:
   m_BaseOffset: 1
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &4215757318980874564
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3356633501965790027}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a27cbfd1c88b7f4b855a1f2b59f54fe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  health: 0
-  healthMax: 0
 --- !u!114 &2101848562656317304
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -150,17 +135,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6e893105092b3248bd39da44ffc5a0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  healthBarSlider: {fileID: 4310246783394486237}
   attackRange: 7
   fireRate: 1
   damage: 30
-  stopChasingDis: 11
   startingArea: 1
   health: 100
   targetFinder: {fileID: 0}
-  unitSelec: {fileID: 0}
-  healthBarSlider: {fileID: 4310246783394486237}
-  healthSystem: {fileID: 4215757318980874564}
-  outline: {fileID: 2173845240464010848}
+  moneyToDrop: 10
 --- !u!114 &2173845240464010848
 MonoBehaviour:
   m_ObjectHideFlags: 0

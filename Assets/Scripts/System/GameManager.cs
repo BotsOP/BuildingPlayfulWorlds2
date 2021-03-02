@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    int money; 
-    
+    public int money; 
+    [HideInInspector] public bool allowBigMage;
+    [HideInInspector] public bool allowBigSwordsmen;
 }

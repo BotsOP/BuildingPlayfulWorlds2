@@ -18,10 +18,11 @@ public class EnemyAI : MonoBehaviour, IDamagable
     //[SerializeField] float visualRange;
     [SerializeField] float fireRate;
     [SerializeField] int damage;
-    [SerializeField] float stopChasingDis;
     [SerializeField] float startingArea;
     [SerializeField] float health;
-    [SerializeField] TargetFinder targetFinder;
+    [SerializeField] CampsiteManager campsiteManager;
+    [SerializeField] int moneyToDrop;
+    //[SerializeField] GameObject coinPrefab;
     float nextShootTime;
     float maxHealth;
     Vector3 startingPosition;
@@ -31,7 +32,6 @@ public class EnemyAI : MonoBehaviour, IDamagable
     NavMeshAgent agent;
     float miniumRoamingDelay = 10f;
     float NextTime;
-    public Outline outline;
 
     void Start()
     {
@@ -41,6 +41,7 @@ public class EnemyAI : MonoBehaviour, IDamagable
         roamPos = GetRoamingPosition();
 
         maxHealth = health;
+        NextTime = Random.Range(1, miniumRoamingDelay * 5);
     }
 
     void Update()
@@ -64,20 +65,19 @@ public class EnemyAI : MonoBehaviour, IDamagable
                 break;
 
             case State.ChaseTarget:
-                if (targetFinder.targetList.Count == 0)
+                if (campsiteManager.targetList.Count == 0)
                 {
-                    Debug.Log("test");
                     state = State.GoingBackToStart;
                     break;
                 }
 
-                foreach (GameObject target in targetFinder.targetList)
+                foreach (GameObject target in campsiteManager.targetList)
                 {
                     if(target == null)
-                        targetFinder.targetList.Remove(target);
+                        campsiteManager.targetList.Remove(target);
                 }
 
-                GameObject firstTarget = targetFinder.targetList[0];
+                GameObject firstTarget = campsiteManager.targetList[0];
                 
                 agent.SetDestination(firstTarget.transform.position);
 
@@ -87,16 +87,6 @@ public class EnemyAI : MonoBehaviour, IDamagable
                     if(Time.time > nextShootTime)
                     {
                         firstTarget.gameObject.GetComponent<IDamagable>().DealDamage(damage);
-
-                        // if(firstTarget.gameObject.GetComponent<HealthSystem>().health == 0)
-                        // {
-                        //     targetFinder.targetList.RemoveAt(0);
-                        //     if (targetFinder.targetList.Count == 0)
-                        //     {
-                        //         agent.isStopped = false;
-                        //         state = State.GoingBackToStart;
-                        //     }
-                        // }
                         nextShootTime = Time.time + fireRate;
                     }
                 }
@@ -120,33 +110,15 @@ public class EnemyAI : MonoBehaviour, IDamagable
     Vector3 GetRoamingPosition()
     {
         Vector3 randomDir = new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f)).normalized;
-        return startingPosition + randomDir * Random.Range(1f, 7f);
+        return startingPosition + randomDir * Random.Range(1f, 3f);
     }
 
     void FindTarget()
     {
-        if(targetFinder.targetList.Count != 0)
+        if(campsiteManager.targetList.Count != 0)
         {
             state = State.ChaseTarget;
         }
-    }
-
-    //need to redo this func with new campsite mechanic
-    void StopChasingCheck()
-    {
-        for (int i = 0; i < targetFinder.targetList.Count; i++)
-        {
-            if(targetFinder.targetList[i] == null)
-                targetFinder.targetList.RemoveAt(i);
-            if (Vector3.Distance(transform.position, targetFinder.targetList[i].transform.position) > stopChasingDis)
-            {
-                //targetFinder.targetList.Remove(targetFinder.targetList[i]);
-            }
-        }
-        // foreach (GameObject target in targetFinder.targetList)
-        // {
-            
-        // }
     }
 
     public void DealDamage(int damage)
@@ -155,6 +127,8 @@ public class EnemyAI : MonoBehaviour, IDamagable
         healthBarSlider.value = health / maxHealth;
         if(health <= 0)
         {
+            FindObjectOfType<GameManager>().money += moneyToDrop;
+            //Instantiate(coinPrefab, transform.position, Quaternion.identity);
             Destroy(gameObject);
         }
     }

@@ -12,7 +12,6 @@ public class DungeonGenerator: MonoBehaviour
     public GameObject[] WallPrefab;
     public GameObject[] CampsitePrefab;
     public GameObject TorchPrefab;
-    public GameObject EnemyPrefab;
     public NavMeshSurface Surface;
 
 
@@ -35,7 +34,7 @@ public class DungeonGenerator: MonoBehaviour
         AllocateRooms();
         AllocateCorridors();
         BuildDungeon();
-        PlaceEnemies();
+        PlaceCampsites();
     }
     private void AddPrebuildRooms()
     {
@@ -164,13 +163,22 @@ public class DungeonGenerator: MonoBehaviour
         Surface.BuildNavMesh();
     }
 
-    private void PlaceEnemies()
+    private void PlaceCampsites()
     {
+        int amountOfCampsitesWithItems = 2;
+        int currentCampsiteWithItems = 0;
         for (int roomIndex = 1; roomIndex < roomList.Count; roomIndex++)
         {
             Vector3 randomRotation = new Vector3(0, Random.Range(1,5) * 90, 0);
             Vector3 roomPosition = new Vector3(roomList[roomIndex].position.x + roomList[roomIndex].size.x / 2, 0, roomList[roomIndex].position.y + roomList[roomIndex].size.y / 2);
-            Instantiate(CampsitePrefab[0], roomPosition, Quaternion.Euler(randomRotation));
+
+            if(currentCampsiteWithItems < amountOfCampsitesWithItems)
+            {
+                Instantiate(CampsitePrefab[1], roomPosition, Quaternion.Euler(randomRotation));
+                currentCampsiteWithItems++;
+            }
+            else
+                Instantiate(CampsitePrefab[0], roomPosition, Quaternion.Euler(randomRotation));
         }
     }
 
