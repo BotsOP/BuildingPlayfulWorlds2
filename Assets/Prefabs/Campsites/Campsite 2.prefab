@@ -1,21 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!208 &4938779518808936176
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 880199545139591643}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
-  m_MoveThreshold: 0.1
-  m_Carve: 1
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 0, z: 0}
-  m_TimeToStationary: 0.5
 --- !u!1 &1639197329887145984
 GameObject:
   m_ObjectHideFlags: 0
@@ -3633,21 +3617,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7158238470295766352, guid: dc2dba7124f5cf14981dd2c6ef6b4489,
         type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.84991753
-      objectReference: {fileID: 0}
-    - target: {fileID: 7158238470295766352, guid: dc2dba7124f5cf14981dd2c6ef6b4489,
-        type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0.84991753
-      objectReference: {fileID: 0}
-    - target: {fileID: 7158238470295766352, guid: dc2dba7124f5cf14981dd2c6ef6b4489,
-        type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.84991753
-      objectReference: {fileID: 0}
-    - target: {fileID: 7158238470295766352, guid: dc2dba7124f5cf14981dd2c6ef6b4489,
-        type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.69
       objectReference: {fileID: 0}
@@ -3703,12 +3672,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dc2dba7124f5cf14981dd2c6ef6b4489, type: 3}
---- !u!1 &880199545139591643 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7158238470295766367, guid: dc2dba7124f5cf14981dd2c6ef6b4489,
-    type: 3}
-  m_PrefabInstance: {fileID: 8025470769243012228}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &880199545139591636 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7158238470295766352, guid: dc2dba7124f5cf14981dd2c6ef6b4489,

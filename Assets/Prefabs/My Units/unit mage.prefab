@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 1856985009140050382}
   - component: {fileID: 1856985009140050381}
   - component: {fileID: 1856985009140050417}
-  - component: {fileID: 7861656566337799234}
   - component: {fileID: 473844778072784876}
   - component: {fileID: 6370103664449734042}
   - component: {fileID: 7395656253081468836}
@@ -117,30 +116,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healthBarSlider: {fileID: 6410347876025804827}
-  healthSystem: {fileID: 7861656566337799234}
   isActive: 0
   targetFinder: {fileID: 0}
   outline: {fileID: 6370103664449734042}
   health: 80
-  visualRange: 16
+  visualRange: 15
   attackRange: 13
   fireRate: 1
   damage: 30
   unitSelection: {fileID: 0}
---- !u!114 &7861656566337799234
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1856985009140050380}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a27cbfd1c88b7f4b855a1f2b59f54fe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  health: 0
-  healthMax: 0
 --- !u!195 &473844778072784876
 NavMeshAgent:
   m_ObjectHideFlags: 0

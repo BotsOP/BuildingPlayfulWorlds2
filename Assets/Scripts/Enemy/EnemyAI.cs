@@ -6,7 +6,7 @@ using UnityEngine.AI;
 
 public class EnemyAI : MonoBehaviour, IDamagable
 {
-    enum State
+    public enum State
     {
         Roaming,
         ChaseTarget,
@@ -28,7 +28,7 @@ public class EnemyAI : MonoBehaviour, IDamagable
     Vector3 startingPosition;
     Vector3 roamPos;
 
-    State state;
+    public State state;
     NavMeshAgent agent;
     float miniumRoamingDelay = 10f;
     float NextTime;
@@ -86,6 +86,7 @@ public class EnemyAI : MonoBehaviour, IDamagable
                     agent.isStopped = true;
                     if(Time.time > nextShootTime)
                     {
+                        Debug.DrawRay(transform.position, firstTarget.gameObject.transform.position - transform.position, Color.red);
                         firstTarget.gameObject.GetComponent<IDamagable>().DealDamage(damage);
                         nextShootTime = Time.time + fireRate;
                     }
@@ -117,6 +118,7 @@ public class EnemyAI : MonoBehaviour, IDamagable
     {
         if(campsiteManager.targetList.Count != 0)
         {
+            Debug.Log("IK GA AANVALLEN");
             state = State.ChaseTarget;
         }
     }
@@ -127,7 +129,7 @@ public class EnemyAI : MonoBehaviour, IDamagable
         healthBarSlider.value = health / maxHealth;
         if(health <= 0)
         {
-            FindObjectOfType<GameManager>().money += moneyToDrop;
+            FindObjectOfType<GameManager>().Money += moneyToDrop;
             //Instantiate(coinPrefab, transform.position, Quaternion.identity);
             Destroy(gameObject);
         }

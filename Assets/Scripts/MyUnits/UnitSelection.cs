@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class UnitSelection : MonoBehaviour
 {
@@ -79,7 +80,7 @@ public class UnitSelection : MonoBehaviour
                     inventory.SetActive(true);
                 }
 
-                else
+                else if(!IsMouseOverGUI())
                 {
                     selectedGround = true;
                     baseOutline.enabled = false;
@@ -100,11 +101,15 @@ public class UnitSelection : MonoBehaviour
             WhoIsSelected();
             ReleaseSelectionBox();
         }
-
-        if(Input.GetMouseButton(0))
+        else if(Input.GetMouseButtonUp(0))
         {
-            UpdateSelectionBox(Input.mousePosition);
+            ReleaseSelectionBox();
         }
+
+        // if(Input.GetMouseButton(0))
+        // {
+        //     UpdateSelectionBox(Input.mousePosition);
+        // }
     }
 
     void ReleaseSelectionBox()
@@ -168,5 +173,10 @@ public class UnitSelection : MonoBehaviour
 
         selectionBox.sizeDelta = new Vector2(Mathf.Abs(width), Mathf.Abs(height));
         selectionBox.anchoredPosition = startPos + new Vector2(width / 2, height / 2);
+    }
+
+    bool IsMouseOverGUI()
+    {
+        return EventSystem.current.IsPointerOverGameObject();
     }
 }

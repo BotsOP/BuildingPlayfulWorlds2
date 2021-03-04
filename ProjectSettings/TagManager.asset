@@ -6,11 +6,12 @@ TagManager:
   tags:
   - MyUnit
   - Enemy
+  - Canvas
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Minimap
   - Water
   - UI
   - 
