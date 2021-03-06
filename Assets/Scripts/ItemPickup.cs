@@ -15,7 +15,7 @@ public class ItemPickup : MonoBehaviour
             if(randomInt == 1)
             {
                 FindObjectOfType<GameManager>().allowBigMage = true;
-                notification.GetComponent<NotificationText>().SetText("Unlocked big made");
+                notification.GetComponent<NotificationText>().SetText("Unlocked big mage");
             }
             else
             {

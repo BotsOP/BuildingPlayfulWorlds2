@@ -19,6 +19,6 @@ public class GameManager : MonoBehaviour
         }
     }
     [SerializeField] Text moneyText;
-    [HideInInspector] public bool allowBigMage;
-    [HideInInspector] public bool allowBigSwordsmen;
+    public bool allowBigMage;
+    public bool allowBigSwordsmen;
 }

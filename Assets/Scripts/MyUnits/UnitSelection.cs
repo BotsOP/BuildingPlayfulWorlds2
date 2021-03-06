@@ -106,10 +106,10 @@ public class UnitSelection : MonoBehaviour
             ReleaseSelectionBox();
         }
 
-        // if(Input.GetMouseButton(0))
-        // {
-        //     UpdateSelectionBox(Input.mousePosition);
-        // }
+        if(Input.GetMouseButton(0))
+        {
+            UpdateSelectionBox(Input.mousePosition);
+        }
     }
 
     void ReleaseSelectionBox()
@@ -165,6 +165,7 @@ public class UnitSelection : MonoBehaviour
 
     void UpdateSelectionBox(Vector2 curMousePos)
     {
+        
         if (!selectionBox.gameObject.activeInHierarchy)
             selectionBox.gameObject.SetActive(true);
 

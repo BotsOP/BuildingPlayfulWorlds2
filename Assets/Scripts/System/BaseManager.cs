@@ -38,6 +38,7 @@ public class BaseManager : MonoBehaviour, IDamagable
 
     public void SpawnUnit()
     {
+        Debug.Log("test");
         GameObject notification = Instantiate(notificationPrefab, new Vector3(Screen.width / 2, 150, 0), Quaternion.identity, GameObject.FindWithTag("Canvas").transform);
 
         switch (dropdown.value)
@@ -70,7 +71,7 @@ public class BaseManager : MonoBehaviour, IDamagable
                     gameManager.Money -= bigMageCost;
                     return;
                 }
-                if(gameManager.allowBigSwordsmen)
+                if(!gameManager.allowBigSwordsmen)
                 {
                     notification.GetComponent<NotificationText>().SetText("You have not unlocked the big mage");
                     return;
@@ -85,7 +86,7 @@ public class BaseManager : MonoBehaviour, IDamagable
                     gameManager.Money -= bigSwordsmenCost;
                     return;
                 }
-                if(gameManager.allowBigSwordsmen)
+                if(!gameManager.allowBigSwordsmen)
                 {
                     notification.GetComponent<NotificationText>().SetText("You have not unlocked the big swordsmen");
                     return;
