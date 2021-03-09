@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
     public int money = 10;
+    public int timeTillAttack;
     public int Money
     {
         get
@@ -21,4 +22,26 @@ public class GameManager : MonoBehaviour
     [SerializeField] Text moneyText;
     public bool allowBigMage;
     public bool allowBigSwordsmen;
+
+    int amountCampsites;
+
+    public void SetStartCampsiteAmount()
+    {
+        amountCampsites = transform.childCount;
+        Debug.Log(amountCampsites);
+    }
+    void Update()
+    {
+        //Debug.Log(amountCampsites);
+    }
+
+    public void CheckIfEveryoneDead()
+    {
+        amountCampsites--;
+        Debug.Log(amountCampsites);
+        if(amountCampsites == 0)
+        {
+            Debug.Log("JE HEBT IEDEREEN VERMOORD!!!");
+        }
+    }
 }

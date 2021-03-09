@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class BaseManager : MonoBehaviour, IDamagable
 {
+    public List<GameObject> AliveUnitList = new List<GameObject>();
     [SerializeField] int health;
     [SerializeField] TMPro.TMP_Dropdown dropdown;
     [SerializeField] GameObject[] UnitList;
@@ -19,20 +20,30 @@ public class BaseManager : MonoBehaviour, IDamagable
     GameManager gameManager;
     int maxHealth;
     bool attackingBase;
+    int timeTillAttack;
     void Start()
     {
         gameManager = FindObjectOfType<GameManager>();
         maxHealth = health;
+        timeTillAttack = gameManager.timeTillAttack;
     }
 
     private void Update() 
     {
-        int timeToAttack = 300;
-        if(Time.time > timeToAttack && !attackingBase)
+        if(Time.time > timeTillAttack && !attackingBase)
         {
             GameObject notification = Instantiate(notificationPrefab, new Vector3(Screen.width / 2, 150, 0), Quaternion.identity, GameObject.FindWithTag("Canvas").transform);
             notification.GetComponent<NotificationText>().SetText("ATTACK INCOMING, DEFEND!!!");
             attackingBase = true;
+        }
+    }
+
+    public void CheckIfUnitsDead()
+    {
+        if(AliveUnitList.Count == 0)
+        {
+            //GameOver
+            Debug.Log("game over");
         }
     }
 
@@ -46,7 +57,8 @@ public class BaseManager : MonoBehaviour, IDamagable
             case 0:
                 if(gameManager.Money >= swordsmenCost)
                 {
-                    Instantiate(UnitList[0], spawnTransform);
+                    GameObject unit = Instantiate(UnitList[0], spawnTransform);
+                    AliveUnitList.Add(unit);
                     notification.GetComponent<NotificationText>().SetText("Spawned swordsmen");
                     gameManager.Money -= swordsmenCost;
                     return;
@@ -56,7 +68,8 @@ public class BaseManager : MonoBehaviour, IDamagable
             case 1:
                 if(gameManager.Money >= mageCost)
                 {
-                    Instantiate(UnitList[1], spawnTransform);
+                    GameObject unit = Instantiate(UnitList[1], spawnTransform);
+                    AliveUnitList.Add(unit);
                     notification.GetComponent<NotificationText>().SetText("Spawned mage");
                     gameManager.Money -= mageCost;
                     return;
@@ -66,7 +79,8 @@ public class BaseManager : MonoBehaviour, IDamagable
             case 2:
                 if(gameManager.Money >= bigMageCost && gameManager.allowBigSwordsmen)
                 {
-                    Instantiate(UnitList[2], spawnTransform);
+                    GameObject unit = Instantiate(UnitList[2], spawnTransform);
+                    AliveUnitList.Add(unit);
                     notification.GetComponent<NotificationText>().SetText("Spawned big mage");
                     gameManager.Money -= bigMageCost;
                     return;
@@ -81,7 +95,8 @@ public class BaseManager : MonoBehaviour, IDamagable
             case 3:
                 if(gameManager.Money >= bigSwordsmenCost && gameManager.allowBigSwordsmen)
                 {
-                    Instantiate(UnitList[3], spawnTransform);
+                    GameObject unit = Instantiate(UnitList[3], spawnTransform);
+                    AliveUnitList.Add(unit);
                     notification.GetComponent<NotificationText>().SetText("Spawned big swordsmen");
                     gameManager.Money -= bigSwordsmenCost;
                     return;
@@ -105,6 +120,7 @@ public class BaseManager : MonoBehaviour, IDamagable
         healthBarSlider.value = (float)health / maxHealth;
         if(health <= 0)
         {
+            //GameOver
             Destroy(gameObject);
         }
     }

@@ -5,22 +5,32 @@ using UnityEngine;
 public class CampsiteManager : MonoBehaviour
 {
     public List<GameObject> targetList = new List<GameObject>();
+    public List<GameObject> AliveEnemyList = new List<GameObject>();
     BoxCollider bc;
     bool attackingBase;
+    int timeTillAttack;
 
     private void Start()
     {
         bc = gameObject.GetComponent<BoxCollider>();
+        timeTillAttack = FindObjectOfType<GameManager>().timeTillAttack;
     }
 
     private void Update() 
     {
-        int timeToAttack = 300;
-        if(Time.time > timeToAttack && !attackingBase)
+        if(Time.time > timeTillAttack && !attackingBase)
         {
-            Debug.Log("test");
             targetList.Add(FindObjectOfType<BaseManager>().gameObject);
             attackingBase = true;
+        }
+    }
+
+    public void CheckIfCampsiteDead()
+    {
+        if(AliveEnemyList.Count == 0)
+        {
+            FindObjectOfType<GameManager>().CheckIfEveryoneDead();
+            Destroy(gameObject);
         }
     }
 

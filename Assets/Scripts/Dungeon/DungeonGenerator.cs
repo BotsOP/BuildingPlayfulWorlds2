@@ -12,6 +12,7 @@ public class DungeonGenerator: MonoBehaviour
     public GameObject[] WallPrefab;
     public GameObject[] CampsitePrefab;
     public GameObject TorchPrefab;
+    public GameObject CampsiteParent;
     public NavMeshSurface Surface;
 
 
@@ -28,13 +29,15 @@ public class DungeonGenerator: MonoBehaviour
     private List<Room> roomList = new List<Room>();
     private List<GameObject> allSpawnedObjects = new List<GameObject>();
     int torchAmount;
-    void Start()
+    void Awake()
     {
         AddPrebuildRooms();
         AllocateRooms();
         AllocateCorridors();
         BuildDungeon();
         PlaceCampsites();
+
+        FindObjectOfType<GameManager>().SetStartCampsiteAmount();
     }
     private void AddPrebuildRooms()
     {
@@ -174,11 +177,11 @@ public class DungeonGenerator: MonoBehaviour
 
             if(currentCampsiteWithItems < amountOfCampsitesWithItems)
             {
-                Instantiate(CampsitePrefab[1], roomPosition, Quaternion.Euler(randomRotation));
+                Instantiate(CampsitePrefab[1], roomPosition, Quaternion.Euler(randomRotation), CampsiteParent.transform);
                 currentCampsiteWithItems++;
             }
             else
-                Instantiate(CampsitePrefab[0], roomPosition, Quaternion.Euler(randomRotation));
+                Instantiate(CampsitePrefab[0], roomPosition, Quaternion.Euler(randomRotation), CampsiteParent.transform);
         }
     }
 

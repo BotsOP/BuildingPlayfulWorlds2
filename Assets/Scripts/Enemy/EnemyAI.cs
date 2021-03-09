@@ -118,7 +118,6 @@ public class EnemyAI : MonoBehaviour, IDamagable
     {
         if(campsiteManager.targetList.Count != 0)
         {
-            Debug.Log("IK GA AANVALLEN");
             state = State.ChaseTarget;
         }
     }
@@ -130,7 +129,8 @@ public class EnemyAI : MonoBehaviour, IDamagable
         if(health <= 0)
         {
             FindObjectOfType<GameManager>().Money += moneyToDrop;
-            //Instantiate(coinPrefab, transform.position, Quaternion.identity);
+            campsiteManager.AliveEnemyList.Remove(gameObject);
+            campsiteManager.CheckIfCampsiteDead();
             Destroy(gameObject);
         }
     }

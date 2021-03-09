@@ -120,6 +120,8 @@ public class BasicUnitHandler : MonoBehaviour, IDamagable
         healthBarSlider.value = health / maxHealth;
         if(health <= 0)
         {
+            FindObjectOfType<BaseManager>().AliveUnitList.Remove(gameObject);
+            FindObjectOfType<BaseManager>().CheckIfUnitsDead();
             unitSelection.unitSelectionList.Remove(this);
             Destroy(gameObject);
         }
