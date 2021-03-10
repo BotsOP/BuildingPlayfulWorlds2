@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class BaseManager : MonoBehaviour, IDamagable
@@ -21,16 +22,20 @@ public class BaseManager : MonoBehaviour, IDamagable
     int maxHealth;
     bool attackingBase;
     int timeTillAttack;
+    float startTimer;
+
     void Start()
     {
         gameManager = FindObjectOfType<GameManager>();
         maxHealth = health;
         timeTillAttack = gameManager.timeTillAttack;
+
+        startTimer = Time.time;
     }
 
     private void Update() 
     {
-        if(Time.time > timeTillAttack && !attackingBase)
+        if(Time.time > timeTillAttack + startTimer && !attackingBase)
         {
             GameObject notification = Instantiate(notificationPrefab, new Vector3(Screen.width / 2, 150, 0), Quaternion.identity, GameObject.FindWithTag("Canvas").transform);
             notification.GetComponent<NotificationText>().SetText("ATTACK INCOMING, DEFEND!!!");
@@ -42,8 +47,7 @@ public class BaseManager : MonoBehaviour, IDamagable
     {
         if(AliveUnitList.Count == 0)
         {
-            //GameOver
-            Debug.Log("game over");
+            SceneManager.LoadScene("Lose");
         }
     }
 
@@ -77,7 +81,7 @@ public class BaseManager : MonoBehaviour, IDamagable
                 notification.GetComponent<NotificationText>().SetText("You dont have enough soul points!");
                 break;
             case 2:
-                if(gameManager.Money >= bigMageCost && gameManager.allowBigSwordsmen)
+                if(gameManager.Money >= bigMageCost && gameManager.allowBigMage)
                 {
                     GameObject unit = Instantiate(UnitList[2], spawnTransform);
                     AliveUnitList.Add(unit);
@@ -85,7 +89,7 @@ public class BaseManager : MonoBehaviour, IDamagable
                     gameManager.Money -= bigMageCost;
                     return;
                 }
-                if(!gameManager.allowBigSwordsmen)
+                if(!gameManager.allowBigMage)
                 {
                     notification.GetComponent<NotificationText>().SetText("You have not unlocked the big mage");
                     return;
@@ -120,8 +124,7 @@ public class BaseManager : MonoBehaviour, IDamagable
         healthBarSlider.value = (float)health / maxHealth;
         if(health <= 0)
         {
-            //GameOver
-            Destroy(gameObject);
+            SceneManager.LoadScene("Lose");
         }
     }
 }

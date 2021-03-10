@@ -13,7 +13,8 @@ public class UnitController : MonoBehaviour
 
     void Update()
     {
-        MouseInput();
+        if(!PauseMenu.isPaused)
+            MouseInput();
     }
 
     void MouseInput()

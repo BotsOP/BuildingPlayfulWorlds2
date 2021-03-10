@@ -9,16 +9,19 @@ public class CampsiteManager : MonoBehaviour
     BoxCollider bc;
     bool attackingBase;
     int timeTillAttack;
+    float startTimer;
 
     private void Start()
     {
         bc = gameObject.GetComponent<BoxCollider>();
         timeTillAttack = FindObjectOfType<GameManager>().timeTillAttack;
+
+        startTimer = Time.time;
     }
 
     private void Update() 
     {
-        if(Time.time > timeTillAttack && !attackingBase)
+        if(Time.time > timeTillAttack  + startTimer && !attackingBase)
         {
             targetList.Add(FindObjectOfType<BaseManager>().gameObject);
             attackingBase = true;
@@ -30,7 +33,7 @@ public class CampsiteManager : MonoBehaviour
         if(AliveEnemyList.Count == 0)
         {
             FindObjectOfType<GameManager>().CheckIfEveryoneDead();
-            Destroy(gameObject);
+            Destroy(transform.GetChild(0).gameObject);
         }
     }
 

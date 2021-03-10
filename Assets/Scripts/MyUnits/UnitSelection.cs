@@ -19,13 +19,16 @@ public class UnitSelection : MonoBehaviour
 
     void Update()
     {
-        if(!Input.GetKey(KeyCode.LeftShift))
+        if(!PauseMenu.isPaused)
         {
-            MouseInput();
-        }
-        if(Input.GetKeyDown(KeyCode.LeftShift))
-        {
-            ReleaseSelectionBox();
+            if(!Input.GetKey(KeyCode.LeftShift))
+            {
+                MouseInput();
+            }
+            if(Input.GetKeyDown(KeyCode.LeftShift))
+            {
+                ReleaseSelectionBox();
+            }
         }
     }
 

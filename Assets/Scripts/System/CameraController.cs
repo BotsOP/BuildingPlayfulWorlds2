@@ -37,10 +37,16 @@ public class CameraController : MonoBehaviour
 
     void HandleMouseInput()
     {
-        if (Input.mouseScrollDelta.y != 0)
+        int maxAmountZoom = 4;
+        if (Input.mouseScrollDelta.y != 0 && newZoom.y > maxAmountZoom)
         {
             newZoom += Input.mouseScrollDelta.y * zoomAmount;
         }
+        else if(Input.mouseScrollDelta.y != 0 && Input.mouseScrollDelta.y < 0)
+        {
+            newZoom += Input.mouseScrollDelta.y * zoomAmount;
+        }
+
         if (Input.GetMouseButtonDown(0) && Input.GetKey(KeyCode.LeftShift))
         {
             Plane plane = new Plane(Vector3.up, Vector3.zero);
@@ -51,6 +57,7 @@ public class CameraController : MonoBehaviour
                 dragStartPosition = ray.GetPoint(entry);
             }
         }
+
         if (Input.GetMouseButton(0) && Input.GetKey(KeyCode.LeftShift))
         {
             Plane plane = new Plane(Vector3.up, Vector3.zero);
@@ -68,6 +75,7 @@ public class CameraController : MonoBehaviour
         {
             rotateStartPosition = Input.mousePosition;
         }
+        
         if (Input.GetMouseButton(2))
         {
             rotateCurrentPosition = Input.mousePosition;
@@ -80,15 +88,6 @@ public class CameraController : MonoBehaviour
 
     void HandleMovementInput()
     {
-        // if(Input.GetKey(KeyCode.LeftShift))
-        // {
-        //     movementSpeed = fastSpeed;
-        // }
-        // else
-        // {
-        //     movementSpeed = normalSpeed;
-        // }
-
         if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
         {
             newPosition += (transform.forward * movementSpeed);

@@ -24,6 +24,7 @@ public class DungeonGenerator: MonoBehaviour
     public int maxRoomSize;
     public int widthCorridor;
     public int roomAroundRooms;
+    public int amountOfCampsitesWithItems = 2;
 
     private Dictionary<Vector2Int, Tile> dungeonDictionary = new Dictionary<Vector2Int, Tile>();
     private List<Room> roomList = new List<Room>();
@@ -168,7 +169,6 @@ public class DungeonGenerator: MonoBehaviour
 
     private void PlaceCampsites()
     {
-        int amountOfCampsitesWithItems = 2;
         int currentCampsiteWithItems = 0;
         for (int roomIndex = 1; roomIndex < roomList.Count; roomIndex++)
         {

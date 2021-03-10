@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
@@ -30,10 +31,6 @@ public class GameManager : MonoBehaviour
         amountCampsites = transform.childCount;
         Debug.Log(amountCampsites);
     }
-    void Update()
-    {
-        //Debug.Log(amountCampsites);
-    }
 
     public void CheckIfEveryoneDead()
     {
@@ -41,7 +38,7 @@ public class GameManager : MonoBehaviour
         Debug.Log(amountCampsites);
         if(amountCampsites == 0)
         {
-            Debug.Log("JE HEBT IEDEREEN VERMOORD!!!");
+            SceneManager.LoadScene("Win");
         }
     }
 }
